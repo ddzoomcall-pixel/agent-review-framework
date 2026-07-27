@@ -63,7 +63,7 @@ export default function ReviewerDecisionPage() {
         remediation_required: 'remediation_required',
       } as const;
 
-      const { error: updateError } = await supabase
+      const { error: updateError } = await (supabase as any)
         .from('register_entries')
         .update({
           status: statusMap[decision],
