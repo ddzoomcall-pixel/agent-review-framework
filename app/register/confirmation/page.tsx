@@ -1,13 +1,12 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
+import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import shared from '../../shared.module.css';
 
-export default function SubmissionConfirmationPage() {
+function ConfirmationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tier = searchParams.get('tier') ?? 'unknown';
@@ -135,5 +134,13 @@ export default function SubmissionConfirmationPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function SubmissionConfirmationPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmationContent />
+    </Suspense>
   );
 }

@@ -1,7 +1,6 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
+import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeToggle } from '../../components/ThemeToggle';
@@ -9,7 +8,7 @@ import shared from '../../shared.module.css';
 
 type Decision = 'approved' | 'more_info_requested' | 'remediation_required';
 
-export default function DecisionConfirmationPage() {
+function ConfirmationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const decision = (searchParams.get('decision') ?? 'approved') as Decision;
@@ -170,5 +169,13 @@ export default function DecisionConfirmationPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function DecisionConfirmationPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmationContent />
+    </Suspense>
   );
 }
