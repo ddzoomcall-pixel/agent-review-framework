@@ -20,7 +20,7 @@ export default function ExportPage() {
     async function load() {
       try {
         const supabase = createClient();
-        const { data, error } = await supabase.from('register_entries').select('*').order('created_at', { ascending: false });
+        const { data, error } = await (supabase as any).from('register_entries').select('*').order('created_at', { ascending: false });
         if (error) throw error;
         if (!cancelled) setEntries(data ?? []);
       } catch (err) {

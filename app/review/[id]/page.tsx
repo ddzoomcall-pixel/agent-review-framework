@@ -49,7 +49,7 @@ export default function ReviewerDecisionPage() {
       } = await supabase.auth.getUser();
       if (userError || !user) throw new Error('Not signed in.');
 
-      const { error: decisionError } = await supabase.from('decisions').insert({
+      const { error: decisionError } = await (supabase as any).from('decisions').insert({
         register_entry_id: entry.id,
         reviewer_id: user.id,
         decision,

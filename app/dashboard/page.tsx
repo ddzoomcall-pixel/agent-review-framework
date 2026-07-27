@@ -42,7 +42,7 @@ export default function DashboardPage() {
     async function load() {
       try {
         const supabase = createClient();
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from('register_entries')
           .select('*')
           .order('created_at', { ascending: false });
