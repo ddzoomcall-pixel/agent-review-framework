@@ -44,7 +44,7 @@ export default function DecisionConfirmationPage() {
         `${itemName} has been paused pending remediation.`,
         `${ownerName} has been notified and given until ${deadline || 'the specified date'} to resolve the issues.`,
         'The agent will remain non-operational until remediation is complete and approved.',
-        'Monitor your queue for the owner's follow-up submission.',
+        "Monitor your queue for the owner's follow-up submission.",
       ],
     },
   };
