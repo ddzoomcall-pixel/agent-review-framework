@@ -147,38 +147,34 @@ export default function RegisterPage() {
         throw new Error('Not signed in. Sign in first, then submit.');
       }
 
-      const { error } = await supabase
-        .from('register_entries')
-        .insert({
-          owner_id: user.id,
-          owner_name: owner,
-          team,
-          llm_provider: llmProvider,
-          data_categories: dataCategories,
-          client_facing: clientFacing,
-          existing_sign_off: null,
-          cls_step1_still_experiment: cls.stillExperiment,
-          cls_step2_named_owner_and_used: cls.namedOwnerAndUsed,
-          cls_step3_decides_own_next_move: cls.decidesOwnNextMove,
-          cls_step4_fixed_sequence: cls.fixedSequence,
-          technical_form: classification.technicalForm,
-          maturity_label: classification.maturityLabel,
-          auto_step1_real_external_effect: auto.realExternalEffect,
-          auto_step2_produces_draft: auto.producesDraft,
-          autonomy_level: autonomyLevel,
-          hard_trigger_h1_nav_valuation: affectsNav === true,
-          hard_trigger_h2_marketing: clientFacing && marketingUse === true,
-          validated_source_of_truth: validatedTruth,
-          writes_authoritative_record: writesAuthoritative,
-          outage_impacts_deliverable: outageImpacts,
-          ingests_untrusted_content: ingestsUntrusted,
-          risk_tier: riskTier?.tier ?? null,
-          risk_tier_reason: riskTier?.reason ?? null,
-          status: riskTier?.tier === 'full_review' ? 'assigned' : 'pending',
-          owner_contradiction_resolved: true,
-        })
-        .select()
-        .single();
+      const { error } = await supabase.from('register_entries').insert({
+        owner_id: user.id,
+        owner_name: owner,
+        team,
+        llm_provider: llmProvider,
+        data_categories: dataCategories,
+        client_facing: clientFacing,
+        existing_sign_off: null,
+        cls_step1_still_experiment: cls.stillExperiment,
+        cls_step2_named_owner_and_used: cls.namedOwnerAndUsed,
+        cls_step3_decides_own_next_move: cls.decidesOwnNextMove,
+        cls_step4_fixed_sequence: cls.fixedSequence,
+        technical_form: classification.technicalForm,
+        maturity_label: classification.maturityLabel,
+        auto_step1_real_external_effect: auto.realExternalEffect,
+        auto_step2_produces_draft: auto.producesDraft,
+        autonomy_level: autonomyLevel,
+        hard_trigger_h1_nav_valuation: affectsNav === true,
+        hard_trigger_h2_marketing: clientFacing && marketingUse === true,
+        validated_source_of_truth: validatedTruth,
+        writes_authoritative_record: writesAuthoritative,
+        outage_impacts_deliverable: outageImpacts,
+        ingests_untrusted_content: ingestsUntrusted,
+        risk_tier: riskTier?.tier ?? null,
+        risk_tier_reason: riskTier?.reason ?? null,
+        status: riskTier?.tier === 'full_review' ? 'assigned' : 'pending',
+        owner_contradiction_resolved: true,
+      } as any);
 
       if (error) throw error;
 
