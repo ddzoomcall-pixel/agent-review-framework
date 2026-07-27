@@ -1,5 +1,6 @@
 'use client';
-// Build cache buster
+
+export const dynamic = 'force-dynamic';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
