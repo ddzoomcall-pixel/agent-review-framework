@@ -1,0 +1,113 @@
+:root {
+  --bg: #E4EAE0;
+  --surface: #F6F8F2;
+  --surface-2: #EDF1E7;
+  --rule: #C4CFB9;
+  --ink: #17241B;
+  --ink-muted: #4B5C48;
+  --accent: #1F5C46;
+  --accent-strong: #143D2F;
+  --accent-tint: #DCE8DE;
+  --stamp-red: #9C3B32;
+  --stamp-red-tint: #F3E2DF;
+  --stamp-gold: #93701F;
+  --stamp-gold-tint: #F1E7CE;
+  --stamp-blue: #2B4A6B;
+  --stamp-blue-tint: #DEE6ED;
+  --focus: #2B6CB0;
+  --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --font-body: Charter, 'Iowan Old Style', Georgia, 'Palatino Linotype', serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E1410;
+    --surface: #141C17;
+    --surface-2: #1A241D;
+    --rule: #2B3A2E;
+    --ink: #E7EEE4;
+    --ink-muted: #9FB29A;
+    --accent: #4FA37F;
+    --accent-strong: #6FBF9B;
+    --accent-tint: #1C2C22;
+    --stamp-red: #D97066;
+    --stamp-red-tint: #2E1D1B;
+    --stamp-gold: #D4AC5A;
+    --stamp-gold-tint: #2B2415;
+    --stamp-blue: #8FB4D8;
+    --stamp-blue-tint: #19232C;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0E1410;
+  --surface: #141C17;
+  --surface-2: #1A241D;
+  --rule: #2B3A2E;
+  --ink: #E7EEE4;
+  --ink-muted: #9FB29A;
+  --accent: #4FA37F;
+  --accent-strong: #6FBF9B;
+  --accent-tint: #1C2C22;
+  --stamp-red: #D97066;
+  --stamp-red-tint: #2E1D1B;
+  --stamp-gold: #D4AC5A;
+  --stamp-gold-tint: #2B2415;
+  --stamp-blue: #8FB4D8;
+  --stamp-blue-tint: #19232C;
+}
+
+:root[data-theme='light'] {
+  --bg: #E4EAE0;
+  --surface: #F6F8F2;
+  --surface-2: #EDF1E7;
+  --rule: #C4CFB9;
+  --ink: #17241B;
+  --ink-muted: #4B5C48;
+  --accent: #1F5C46;
+  --accent-strong: #143D2F;
+  --accent-tint: #DCE8DE;
+  --stamp-red: #9C3B32;
+  --stamp-red-tint: #F3E2DF;
+  --stamp-gold: #93701F;
+  --stamp-gold-tint: #F1E7CE;
+  --stamp-blue: #2B4A6B;
+  --stamp-blue-tint: #DEE6ED;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.55;
+}
+
+a {
+  color: var(--accent-strong);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
