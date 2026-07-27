@@ -1,6 +1,5 @@
 'use client';
 
-// Vercel cache buster v2
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -148,7 +147,7 @@ export default function RegisterPage() {
         throw new Error('Not signed in. Sign in first, then submit.');
       }
 
-      const { error } = await supabase.from('register_entries').insert({
+      const insertData = {
         owner_id: user.id,
         owner_name: owner,
         team,
@@ -175,7 +174,9 @@ export default function RegisterPage() {
         risk_tier_reason: riskTier?.reason ?? null,
         status: riskTier?.tier === 'full_review' ? 'assigned' : 'pending',
         owner_contradiction_resolved: true,
-      } as any);
+      };
+
+      const { error } = await (supabase.from('register_entries').insert(insertData) as any);
 
       if (error) throw error;
 
