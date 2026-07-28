@@ -1,20 +1,20 @@
 :root {
-  --bg: #E4EAE0;
-  --surface: #F6F8F2;
-  --surface-2: #EDF1E7;
-  --rule: #C4CFB9;
-  --ink: #17241B;
-  --ink-muted: #4B5C48;
-  --accent: #1F5C46;
-  --accent-strong: #143D2F;
-  --accent-tint: #DCE8DE;
-  --stamp-red: #9C3B32;
-  --stamp-red-tint: #F3E2DF;
-  --stamp-gold: #93701F;
-  --stamp-gold-tint: #F1E7CE;
-  --stamp-blue: #2B4A6B;
-  --stamp-blue-tint: #DEE6ED;
-  --focus: #2B6CB0;
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --rule: #e2e8f0;
+  --ink: #1e293b;
+  --ink-muted: #64748b;
+  --accent: #3b82f6;
+  --accent-strong: #1e40af;
+  --accent-tint: #eff6ff;
+  --stamp-red: #dc2626;
+  --stamp-red-tint: #fee2e2;
+  --stamp-gold: #ea580c;
+  --stamp-gold-tint: #fed7aa;
+  --stamp-blue: #3b82f6;
+  --stamp-blue-tint: #dbeafe;
+  --focus: #0284c7;
   --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
   --font-body: Charter, 'Iowan Old Style', Georgia, 'Palatino Linotype', serif;
   --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
@@ -22,58 +22,58 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0E1410;
-    --surface: #141C17;
-    --surface-2: #1A241D;
-    --rule: #2B3A2E;
-    --ink: #E7EEE4;
-    --ink-muted: #9FB29A;
-    --accent: #4FA37F;
-    --accent-strong: #6FBF9B;
-    --accent-tint: #1C2C22;
-    --stamp-red: #D97066;
-    --stamp-red-tint: #2E1D1B;
-    --stamp-gold: #D4AC5A;
-    --stamp-gold-tint: #2B2415;
-    --stamp-blue: #8FB4D8;
-    --stamp-blue-tint: #19232C;
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #334155;
+    --rule: #475569;
+    --ink: #f1f5f9;
+    --ink-muted: #cbd5e1;
+    --accent: #60a5fa;
+    --accent-strong: #93c5fd;
+    --accent-tint: #0c2340;
+    --stamp-red: #f87171;
+    --stamp-red-tint: #1f2937;
+    --stamp-gold: #fb923c;
+    --stamp-gold-tint: #1f2937;
+    --stamp-blue: #60a5fa;
+    --stamp-blue-tint: #0c2340;
   }
 }
 
 :root[data-theme='dark'] {
-  --bg: #0E1410;
-  --surface: #141C17;
-  --surface-2: #1A241D;
-  --rule: #2B3A2E;
-  --ink: #E7EEE4;
-  --ink-muted: #9FB29A;
-  --accent: #4FA37F;
-  --accent-strong: #6FBF9B;
-  --accent-tint: #1C2C22;
-  --stamp-red: #D97066;
-  --stamp-red-tint: #2E1D1B;
-  --stamp-gold: #D4AC5A;
-  --stamp-gold-tint: #2B2415;
-  --stamp-blue: #8FB4D8;
-  --stamp-blue-tint: #19232C;
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface-2: #334155;
+  --rule: #475569;
+  --ink: #f1f5f9;
+  --ink-muted: #cbd5e1;
+  --accent: #60a5fa;
+  --accent-strong: #93c5fd;
+  --accent-tint: #0c2340;
+  --stamp-red: #f87171;
+  --stamp-red-tint: #1f2937;
+  --stamp-gold: #fb923c;
+  --stamp-gold-tint: #1f2937;
+  --stamp-blue: #60a5fa;
+  --stamp-blue-tint: #0c2340;
 }
 
 :root[data-theme='light'] {
-  --bg: #E4EAE0;
-  --surface: #F6F8F2;
-  --surface-2: #EDF1E7;
-  --rule: #C4CFB9;
-  --ink: #17241B;
-  --ink-muted: #4B5C48;
-  --accent: #1F5C46;
-  --accent-strong: #143D2F;
-  --accent-tint: #DCE8DE;
-  --stamp-red: #9C3B32;
-  --stamp-red-tint: #F3E2DF;
-  --stamp-gold: #93701F;
-  --stamp-gold-tint: #F1E7CE;
-  --stamp-blue: #2B4A6B;
-  --stamp-blue-tint: #DEE6ED;
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --rule: #e2e8f0;
+  --ink: #1e293b;
+  --ink-muted: #64748b;
+  --accent: #3b82f6;
+  --accent-strong: #1e40af;
+  --accent-tint: #eff6ff;
+  --stamp-red: #dc2626;
+  --stamp-red-tint: #fee2e2;
+  --stamp-gold: #ea580c;
+  --stamp-gold-tint: #fed7aa;
+  --stamp-blue: #3b82f6;
+  --stamp-blue-tint: #dbeafe;
 }
 
 @media (prefers-reduced-motion: reduce) {
