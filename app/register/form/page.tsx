@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 type TierType = 'low' | 'review' | 'escalate' | 'unknown' | 'na' | 'pending';
@@ -112,11 +112,25 @@ function computeTier(answers: Record<string, any>): TierResult {
   return { tier: 'low', label: 'Low risk', reasons: ['Public/synthetic data only, no flagged integrations or cross-client exposure detected.'] };
 }
 
-export default function FormPage() {
+function FormPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [tierResult, setTierResult] = useState<TierResult>({ tier: 'pending', label: 'Answer questions to compute tier', reasons: [] });
   const [currentSection, setCurrentSection] = useState(0);
+
+  // Initialize from query params (intro page data)
+  useEffect(() => {
+    const initialAnswers: Record<string, any> = { ...answers };
+    if (searchParams.get('q1')) initialAnswers.q1 = searchParams.get('q1');
+    if (searchParams.get('q2')) initialAnswers.q2 = searchParams.get('q2');
+    if (searchParams.get('department')) initialAnswers.department = searchParams.get('department');
+    if (searchParams.get('q12')) initialAnswers.q12 = [searchParams.get('q12')];
+
+    if (Object.keys(initialAnswers).length > 0) {
+      setAnswers(initialAnswers);
+    }
+  }, []);
 
   useEffect(() => {
     const newTier = computeTier(answers);
@@ -335,5 +349,13 @@ export default function FormPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function FormPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: '40px', textAlign: 'center' }}>Loading questionnaire...</div>}>
+      <FormPageContent />
+    </Suspense>
   );
 }
