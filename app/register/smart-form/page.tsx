@@ -312,8 +312,8 @@ function SmartFormContent() {
   const handleClassificationComplete = (cat: Category) => {
     setCategory(cat);
     if (['agent', 'workflow'].includes(cat!)) {
-      // Agent/Workflow: skip detailed phase and go to results
-      router.push(`/register/results?category=${cat}&answers=${encodeURIComponent(JSON.stringify(answers))}`);
+      // Agent/Workflow: skip detailed phase and go to logic breakdown
+      router.push(`/register/logic-breakdown?category=${cat}&answers=${encodeURIComponent(JSON.stringify(answers))}`);
     } else {
       // Tool/MVP/Product: proceed to detailed questions
       setPhase('detailed');
@@ -321,7 +321,7 @@ function SmartFormContent() {
   };
 
   const handleDetailedComplete = () => {
-    router.push(`/register/results?category=${category}&answers=${encodeURIComponent(JSON.stringify(answers))}`);
+    router.push(`/register/logic-breakdown?category=${category}&answers=${encodeURIComponent(JSON.stringify(answers))}`);
   };
 
   return (
