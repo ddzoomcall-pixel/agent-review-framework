@@ -1,150 +1,51 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import type { RegisterEntry } from '@/lib/supabase/types';
 import { ThemeToggle } from '../components/ThemeToggle';
 import shared from '../shared.module.css';
 
 type Filter = 'all' | 'light_touch' | 'full_review' | 'cross_check_mismatch' | 'disputed';
 
-function slaClass(entry: RegisterEntry): string {
-  if (entry.status === 'remediation_required') return shared.slaUrgent;
-  if (entry.status === 'assigned') return shared.slaSoon;
-  return shared.slaOk;
-}
-
-function statusLabel(entry: RegisterEntry): string {
-  switch (entry.status) {
-    case 'approved':
-      return 'Approved';
-    case 'assigned':
-      return 'Assigned for review';
-    case 'remediation_required':
-      return `Remediation required${entry.remediation_deadline ? ` — due ${entry.remediation_deadline}` : ''}`;
-    case 'cross_check_mismatch':
-      return 'Cross-check mismatch';
-    case 'disputed':
-      return 'Disputed';
-    default:
-      return 'Pending';
-  }
-}
+const DEMO_DATA = [
+  {
+    id: '1',
+    llm_provider: 'Claude 3 Opus',
+    owner_name: 'Alice Chen',
+    team: 'AI Platform',
+    maturity: 'Product',
+    classification: 'Autonomous Agent',
+    tier: 'full_review',
+    data: 'Customer ID, Financial',
+    status: 'Assigned for review' as const,
+  },
+  {
+    id: '2',
+    llm_provider: 'GPT-4 Turbo',
+    owner_name: 'Bob Martinez',
+    team: 'Content',
+    maturity: 'MVP',
+    classification: 'Document Classifier',
+    tier: 'light_touch',
+    data: 'Public data',
+    status: 'Approved' as const,
+  },
+];
 
 export default function DashboardPage() {
-  const [entries, setEntries] = useState<RegisterEntry[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<Filter>('all');
 
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      try {
-        const supabase = createClient();
-        const { data, error } = await (supabase as any)
-          .from('register_entries')
-          .select('*')
-          .order('created_at', { ascending: false });
-        if (error) throw error;
-        if (!cancelled) setEntries(data ?? []);
-      } catch (err) {
-        // Fallback to demo data when Supabase unavailable
-        if (!cancelled) {
-          const now = new Date().toISOString();
-          const mockData: RegisterEntry[] = [
-            {
-              id: '1',
-              llm_provider: 'Claude 3 Opus',
-              owner_name: 'Alice Chen',
-              owner_id: 'user-1',
-              team: 'AI Platform',
-              maturity_label: 'product',
-              technical_form: 'agent',
-              autonomy_level: 'autonomous_action',
-              data_categories: ['customer_identifiable', 'financial_data'],
-              risk_tier: 'full_review',
-              risk_tier_reason: 'Handles financial data with autonomous decision-making',
-              status: 'assigned',
-              created_at: now,
-              updated_at: now,
-              reviewer_id: null,
-              remediation_deadline: null,
-              client_facing: true,
-              existing_sign_off: null,
-              cls_step1_still_experiment: false,
-              cls_step2_named_owner_and_used: true,
-              cls_step3_decides_own_next_move: true,
-              cls_step4_fixed_sequence: false,
-              auto_step1_real_external_effect: true,
-              auto_step2_produces_draft: false,
-              hard_trigger_h1_nav_valuation: true,
-              hard_trigger_h2_marketing: false,
-              validated_source_of_truth: true,
-              writes_authoritative_record: true,
-              outage_impacts_deliverable: true,
-              ingests_untrusted_content: false,
-              owner_contradiction_resolved: true,
-            },
-            {
-              id: '2',
-              llm_provider: 'GPT-4 Turbo',
-              owner_name: 'Bob Martinez',
-              owner_id: 'user-2',
-              team: 'Content Team',
-              maturity_label: 'mvp',
-              technical_form: 'tool',
-              autonomy_level: 'advisory',
-              data_categories: ['public_data'],
-              risk_tier: 'light_touch',
-              risk_tier_reason: 'MVP on public data, read-only operations',
-              status: 'approved',
-              created_at: now,
-              updated_at: now,
-              reviewer_id: null,
-              remediation_deadline: null,
-              client_facing: false,
-              existing_sign_off: null,
-              cls_step1_still_experiment: true,
-              cls_step2_named_owner_and_used: false,
-              cls_step3_decides_own_next_move: false,
-              cls_step4_fixed_sequence: false,
-              auto_step1_real_external_effect: false,
-              auto_step2_produces_draft: false,
-              hard_trigger_h1_nav_valuation: false,
-              hard_trigger_h2_marketing: false,
-              validated_source_of_truth: false,
-              writes_authoritative_record: false,
-              outage_impacts_deliverable: false,
-              ingests_untrusted_content: false,
-              owner_contradiction_resolved: true,
-            },
-          ];
-          setEntries(mockData);
-        }
-      }
-    }
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const filtered = DEMO_DATA.filter((e) => {
+    if (filter === 'all') return true;
+    if (filter === 'light_touch' || filter === 'full_review') return e.tier === filter;
+    return false;
+  });
 
-  const counts = useMemo(() => {
-    if (!entries) return { total: 0, fullReview: 0, mismatch: 0 };
-    return {
-      total: entries.length,
-      fullReview: entries.filter((e) => e.risk_tier === 'full_review').length,
-      mismatch: entries.filter((e) => e.status === 'cross_check_mismatch').length,
-    };
-  }, [entries]);
-
-  const filtered = useMemo(() => {
-    if (!entries) return [];
-    if (filter === 'all') return entries;
-    if (filter === 'light_touch' || filter === 'full_review') return entries.filter((e) => e.risk_tier === filter);
-    return entries.filter((e) => e.status === filter);
-  }, [entries, filter]);
+  const counts = {
+    total: DEMO_DATA.length,
+    fullReview: DEMO_DATA.filter((e) => e.tier === 'full_review').length,
+    mismatch: 0,
+  };
 
   return (
     <main className={shared.main}>
@@ -157,141 +58,105 @@ export default function DashboardPage() {
         <header className={shared.titlebar}>
           <h1>Agent Register — Compliance view</h1>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <span className={shared.envBadge}>{entries ? `${counts.total} registered` : '…'}</span>
+            <span className={shared.envBadge}>{counts.total} registered</span>
             <Link href="/export" className={shared.btn} style={{ padding: '6px 14px', fontSize: 12 }}>
               Export
             </Link>
           </div>
         </header>
 
-        {error && <div className={shared.errorBanner} role="alert">{error}</div>}
-
-        {!error && entries === null && <div className={shared.loading}>Loading register…</div>}
-
-        {!error && entries !== null && entries.length === 0 && (
-          <div className={shared.loading} style={{ padding: '60px 26px' }}>
-            <div style={{ fontSize: 30, opacity: 0.5, marginBottom: 10 }} aria-hidden="true">▦</div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 17, margin: '0 0 6px', color: 'var(--ink)' }}>
-              No agents registered yet
-            </h2>
-            <p style={{ maxWidth: '44ch', margin: '0 auto 16px' }}>
-              This is expected on day one — the register starts empty until analysts begin submitting. Nothing to
-              review, nothing broken.
-            </p>
-            <Link href="/register" className={`${shared.btn} ${shared.btnPrimary}`}>
-              Register the first item
-            </Link>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, padding: '16px 26px' }}>
+          <div style={{ border: '1px solid var(--rule)', borderRadius: 7, padding: '11px 15px', background: 'var(--surface-2)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 21, fontWeight: 700 }}>{counts.total}</div>
+            <div style={{ fontSize: 10.5, color: 'var(--ink-muted)', textTransform: 'uppercase' }}>Total registered</div>
           </div>
-        )}
+          <div style={{ border: '1px solid var(--rule)', borderRadius: 7, padding: '11px 15px', background: 'var(--surface-2)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 21, fontWeight: 700 }}>{counts.fullReview}</div>
+            <div style={{ fontSize: 10.5, color: 'var(--ink-muted)', textTransform: 'uppercase' }}>Full-review tier</div>
+          </div>
+          <div style={{ border: '1px solid var(--rule)', borderRadius: 7, padding: '11px 15px', background: 'var(--surface-2)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 21, fontWeight: 700 }}>{counts.mismatch}</div>
+            <div style={{ fontSize: 10.5, color: 'var(--ink-muted)', textTransform: 'uppercase' }}>Cross-check mismatch</div>
+          </div>
+        </div>
 
-        {!error && entries !== null && entries.length > 0 && (
-          <>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, padding: '16px 26px' }}>
-              <div style={{ border: '1px solid var(--rule)', borderRadius: 7, padding: '11px 15px', background: 'var(--surface-2)' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 21, fontWeight: 700 }}>{counts.total}</div>
-                <div style={{ fontSize: 10.5, color: 'var(--ink-muted)', textTransform: 'uppercase' }}>Total registered</div>
-              </div>
-              <div style={{ border: '1px solid var(--rule)', borderRadius: 7, padding: '11px 15px', background: 'var(--surface-2)' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 21, fontWeight: 700 }}>{counts.fullReview}</div>
-                <div style={{ fontSize: 10.5, color: 'var(--ink-muted)', textTransform: 'uppercase' }}>Full-review tier</div>
-              </div>
-              <div style={{ border: '1px solid var(--rule)', borderRadius: 7, padding: '11px 15px', background: 'var(--surface-2)' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 21, fontWeight: 700 }}>{counts.mismatch}</div>
-                <div style={{ fontSize: 10.5, color: 'var(--ink-muted)', textTransform: 'uppercase' }}>Cross-check mismatch</div>
-              </div>
-            </div>
+        <div style={{ display: 'flex', borderBottom: '1px solid var(--rule)', padding: '0 26px', overflowX: 'auto' }} role="tablist">
+          {(['all', 'light_touch', 'full_review', 'cross_check_mismatch', 'disputed'] as Filter[]).map((value) => (
+            <button
+              key={value}
+              role="tab"
+              aria-selected={filter === value}
+              onClick={() => setFilter(value)}
+              style={{
+                padding: '11px 16px',
+                fontSize: 12.5,
+                border: 'none',
+                background: 'none',
+                borderBottom: filter === value ? '2px solid var(--accent)' : '2px solid transparent',
+                color: filter === value ? 'var(--ink)' : 'var(--ink-muted)',
+                fontWeight: filter === value ? 600 : 400,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {value === 'all' ? 'All' : value === 'light_touch' ? 'Light-touch' : value === 'full_review' ? 'Full-review' : value === 'cross_check_mismatch' ? 'Flagged' : 'Disputed'}
+            </button>
+          ))}
+        </div>
 
-            <div style={{ display: 'flex', borderBottom: '1px solid var(--rule)', padding: '0 26px', overflowX: 'auto' }} role="tablist">
-              {(
-                [
-                  ['all', 'All'],
-                  ['light_touch', 'Light-touch'],
-                  ['full_review', 'Full-review'],
-                  ['cross_check_mismatch', 'Flagged'],
-                  ['disputed', 'Disputed'],
-                ] as [Filter, string][]
-              ).map(([value, label]) => (
-                <button
-                  key={value}
-                  role="tab"
-                  aria-selected={filter === value}
-                  onClick={() => setFilter(value)}
-                  style={{
-                    padding: '11px 16px',
-                    fontSize: 12.5,
-                    border: 'none',
-                    background: 'none',
-                    borderBottom: filter === value ? '2px solid var(--accent)' : '2px solid transparent',
-                    color: filter === value ? 'var(--ink)' : 'var(--ink-muted)',
-                    fontWeight: filter === value ? 600 : 400,
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {label}
-                </button>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 640 }}>
+            <thead>
+              <tr>
+                {['Name', 'Owner', 'Classification', 'Tier', 'Data', 'Status'].map((h) => (
+                  <th
+                    key={h}
+                    style={{
+                      textAlign: 'left',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 10,
+                      textTransform: 'uppercase',
+                      color: 'var(--ink-muted)',
+                      background: 'var(--surface-2)',
+                      padding: '10px 14px',
+                      borderBottom: '1px solid var(--rule)',
+                    }}
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((entry) => (
+                <tr key={entry.id}>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>{entry.llm_provider}</td>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
+                    {entry.owner_name}, {entry.team}
+                  </td>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>{entry.classification}</td>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
+                    <span className={`${shared.pill} ${entry.tier === 'full_review' ? shared.pillGold : shared.pillBlue}`}>
+                      {entry.tier === 'full_review' ? 'Full-review' : 'Light-touch'}
+                    </span>
+                  </td>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>{entry.data}</td>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
+                    <span className={shared.sla}>{entry.status}</span>
+                    {entry.tier === 'full_review' && (
+                      <>
+                        {' — '}
+                        <Link href={`/review/${entry.id}`} style={{ fontSize: 12 }}>
+                          Review
+                        </Link>
+                      </>
+                    )}
+                  </td>
+                </tr>
               ))}
-            </div>
-
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 640 }}>
-                <thead>
-                  <tr>
-                    {['Name', 'Owner', 'Classification', 'Tier', 'Data', 'Status'].map((h) => (
-                      <th
-                        key={h}
-                        style={{
-                          textAlign: 'left',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: 10,
-                          textTransform: 'uppercase',
-                          color: 'var(--ink-muted)',
-                          background: 'var(--surface-2)',
-                          padding: '10px 14px',
-                          borderBottom: '1px solid var(--rule)',
-                        }}
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((entry) => (
-                    <tr key={entry.id}>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>{entry.llm_provider}</td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
-                        {entry.owner_name}, {entry.team}
-                      </td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
-                        {entry.maturity_label ? (entry.maturity_label === 'mvp' ? 'MVP' : 'Product') : entry.technical_form}
-                      </td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
-                        <span className={`${shared.pill} ${entry.risk_tier === 'full_review' ? shared.pillGold : shared.pillBlue}`}>
-                          {entry.risk_tier === 'full_review' ? 'Full-review' : 'Light-touch'}
-                        </span>
-                      </td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
-                        {entry.data_categories.join(', ') || 'None'}
-                      </td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--surface-2)' }}>
-                        <span className={`${shared.sla} ${slaClass(entry)}`}>{statusLabel(entry)}</span>
-                        {entry.risk_tier === 'full_review' && (
-                          <>
-                            {' — '}
-                            <Link href={`/review/${entry.id}`} style={{ fontSize: 12 }}>
-                              Review
-                            </Link>
-                          </>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
   );
