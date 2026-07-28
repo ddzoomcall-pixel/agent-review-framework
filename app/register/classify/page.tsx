@@ -52,7 +52,7 @@ export default function ClassifyPage() {
   };
 
   const getTypeInfo = (type: ClassificationType) => {
-    const info = {
+    const info: Record<string, any> = {
       agent: {
         title: '🤖 Agent',
         description: 'Autonomous decision-making system',
@@ -78,7 +78,7 @@ export default function ClassifyPage() {
         color: '#ec4899',
       },
     };
-    return info[type];
+    return type ? info[type] : null;
   };
 
   const handleProceed = () => {
