@@ -56,7 +56,7 @@ export default function IntroPage() {
 
       <div style={{ padding: '40px', maxWidth: '600px', margin: '0 auto' }}>
         <div style={{ backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', padding: '40px' }}>
-          <div style={{ marginBottom: '8px', textAlign: 'center', marginBottom: '30px' }}>
+          <div style={{ marginBottom: '30px', textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: '600', color: '#1e3a8a' }}>Let's start with the basics</div>
             <p style={{ fontSize: '13px', color: '#64748b', margin: '8px 0 0' }}>
               Tell us about your AI agent before we dive into the comprehensive questionnaire
