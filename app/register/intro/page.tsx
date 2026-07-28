@@ -36,7 +36,7 @@ export default function IntroPage() {
       return;
     }
 
-    // Pass data to form as query params
+    // Pass data to smart form as query params
     const params = new URLSearchParams({
       q1: formData.agentName,
       q2: formData.owner,
@@ -44,7 +44,7 @@ export default function IntroPage() {
       q12: formData.llmUsed,
     });
 
-    router.push(`/register/form?${params.toString()}`);
+    router.push(`/register/smart-form?${params.toString()}`);
   };
 
   return (
