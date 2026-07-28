@@ -7,7 +7,7 @@ export default function RegisterPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/register/choose');
+    router.replace('/register/classify');
   }, [router]);
 
   return null;
