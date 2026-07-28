@@ -96,6 +96,17 @@ export default function DashboardPage() {
           }}>
             Export Data
           </a>
+          <a href="/admin/logic" style={{
+            padding: '12px 24px',
+            backgroundColor: '#f3f4f6',
+            color: '#1e3a8a',
+            textDecoration: 'none',
+            borderRadius: '8px',
+            fontWeight: '600',
+            border: '1px solid #d1d5db'
+          }}>
+            📋 Classification Logic
+          </a>
         </div>
       </div>
     </div>

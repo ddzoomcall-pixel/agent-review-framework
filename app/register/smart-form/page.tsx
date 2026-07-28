@@ -327,11 +327,28 @@ function SmartFormContent() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f0f4f8', fontFamily: 'system-ui, sans-serif' }}>
       <div style={{ backgroundColor: '#1e3a8a', color: 'white', padding: '20px 40px' }}>
-        <h1 style={{ margin: '0 0 4px', fontSize: '28px' }}>AI Solution Intake</h1>
-        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
-          {answers.q1 && `${answers.q1} • `}
-          {phase === 'classification' ? 'Phase 1: Classification (7 questions)' : `Phase 2: Deep Dive (18 questions)`}
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '900px', margin: '0 auto' }}>
+          <div>
+            <h1 style={{ margin: '0 0 4px', fontSize: '28px' }}>AI Solution Intake</h1>
+            <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
+              {answers.q1 && `${answers.q1} • `}
+              {phase === 'classification' ? 'Phase 1: Classification (7 questions)' : `Phase 2: Deep Dive (18 questions)`}
+            </p>
+          </div>
+          <a href="/admin/logic" style={{
+            padding: '8px 16px',
+            backgroundColor: 'rgba(255,255,255,0.2)',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '6px',
+            fontSize: '13px',
+            fontWeight: '600',
+            whiteSpace: 'nowrap',
+            height: 'fit-content'
+          }}>
+            📋 Reference Logic
+          </a>
+        </div>
       </div>
 
       <div style={{ padding: '40px', maxWidth: '900px', margin: '0 auto' }}>
