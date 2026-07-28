@@ -155,8 +155,10 @@ function FormPageContent() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f0f4f8', fontFamily: 'system-ui, sans-serif' }}>
       <div style={{ backgroundColor: '#1e3a8a', color: 'white', padding: '20px 40px' }}>
-        <h1 style={{ margin: '0 0 4px', fontSize: '28px' }}>AI Solution Intake</h1>
-        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>30-question governance questionnaire with auto-computed risk tier</p>
+        <h1 style={{ margin: '0 0 4px', fontSize: '28px' }}>AI Solution Intake Questionnaire</h1>
+        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9' }}>
+          {answers.q1 ? `${answers.q1} • ` : ''}Section {currentSection + 1} of {sections.length}
+        </p>
       </div>
 
       <div style={{ padding: '40px', maxWidth: '900px', margin: '0 auto' }}>
