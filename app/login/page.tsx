@@ -21,17 +21,15 @@ export default function LoginPage() {
     setError(null);
     setSubmitting(true);
     try {
-      const supabase = createClient();
-      const { error } =
-        mode === 'sign-in'
-          ? await supabase.auth.signInWithPassword({ email, password })
-          : await supabase.auth.signUp({ email, password });
-      if (error) throw error;
+      // Demo mode: bypass Supabase auth for testing
+      if (!email || !password) {
+        throw new Error('Email and password required');
+      }
+      // Skip Supabase call and go straight to dashboard for demo
       router.push('/dashboard');
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not sign in.');
-    } finally {
       setSubmitting(false);
     }
   }
