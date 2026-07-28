@@ -219,7 +219,7 @@ function LogicBreakdownContent() {
                   .filter(([key]) => key.startsWith('c'))
                   .map(([key, value]) => (
                     <li key={key}>
-                      <strong>{questionLabels[key]}:</strong> {value}
+                      <strong>{questionLabels[key]}:</strong> {String(value)}
                     </li>
                   ))}
               </ul>
