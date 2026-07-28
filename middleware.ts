@@ -8,33 +8,37 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet: CookieToSet[]) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+            response = NextResponse.next({ request });
+            cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+          },
         },
-        setAll(cookiesToSet: CookieToSet[]) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
-        },
-      },
+      }
+    );
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const isPublic = PUBLIC_PATHS.some((p) => request.nextUrl.pathname.startsWith(p));
+
+    if (!user && !isPublic) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      return NextResponse.redirect(url);
     }
-  );
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const isPublic = PUBLIC_PATHS.some((p) => request.nextUrl.pathname.startsWith(p));
-
-  if (!user && !isPublic) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
+  } catch (err) {
+    // Demo mode: allow all requests if auth fails
   }
 
   return response;
