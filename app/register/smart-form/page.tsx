@@ -207,7 +207,7 @@ function DetailedPhase({ category, answers, setAnswers, onBack, onComplete }: an
               />
             )}
 
-            {q.type === 'radio' && (
+            {q.type === 'radio' && q.options && (
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {q.options.map((opt) => (
                   <button
@@ -229,7 +229,7 @@ function DetailedPhase({ category, answers, setAnswers, onBack, onComplete }: an
               </div>
             )}
 
-            {q.type === 'checkboxes' && (
+            {q.type === 'checkboxes' && q.options && (
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {q.options.map((opt) => {
                   const selected = (answers[q.id] || []).includes(opt);
